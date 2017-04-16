@@ -24,3 +24,10 @@ func (*Logger) Infoln(args interface{}) {
 func (*Logger) Debug(args interface{}) {
 	debugColor.Println(args)
 }
+
+// WithFields adds the passed fields and attaches them to the logging object
+func (log *Logger) WithFields(fields []DisplayField) {
+	for _, field := range fields {
+		log.fieldsToDisplays = append(log.fieldsToDisplays, field)
+	}
+}
