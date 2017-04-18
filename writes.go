@@ -27,17 +27,22 @@ func write(prefixFunc prefixerSignature, log *Logger, clr *color.Color, ch chan 
 			}
 			return
 		}
-		buf.Reset()
-		fmt.Fprint(buf, args...)
-		logStruct.MessageContent = strings.TrimSpace(buf.String())
-		go func() {
-			// Send the actual message here
-			sendLogMessage(logStruct)
-			ch <- 1
-			if logStruct.MessageType == "FATAL" {
-				os.Exit(1)
-			}
-		}()
+		go sendLogMessageFromWrite(logStruct, ch, args...)
+	}()
+}
+
+// sendLogMessageFromWrite sends log message to server from write()
+func sendLogMessageFromWrite(logStruct logMessage, ch chan int, args ...interface{}) {
+	buf := new(bytes.Buffer)
+	fmt.Fprint(buf, args...)
+	logStruct.MessageContent = strings.TrimSpace(buf.String())
+	go func() {
+		// Send the actual message here
+		sendLogMessage(logStruct)
+		ch <- 1
+		if logStruct.MessageType == "FATAL" {
+			os.Exit(1)
+		}
 	}()
 }
 
@@ -56,17 +61,22 @@ func writef(prefixFunc prefixerSignature, log *Logger, clr *color.Color, ch chan
 			}
 			return
 		}
-		buf.Reset()
-		fmt.Fprintf(buf, format, args...)
-		logStruct.MessageContent = strings.TrimSpace(buf.String())
-		go func() {
-			// Send the actual message here
-			sendLogMessage(logStruct)
-			ch <- 1
-			if logStruct.MessageType == "FATAL" {
-				os.Exit(1)
-			}
-		}()
+		go sendLogMessageFromWritef(logStruct, ch, format, args...)
+	}()
+}
+
+// sendLogMessageFromWritef sends log message to server from writef()
+func sendLogMessageFromWritef(logStruct logMessage, ch chan int, format string, args ...interface{}) {
+	buf := new(bytes.Buffer)
+	fmt.Fprintf(buf, format, args...)
+	logStruct.MessageContent = strings.TrimSpace(buf.String())
+	go func() {
+		// Send the actual message here
+		sendLogMessage(logStruct)
+		ch <- 1
+		if logStruct.MessageType == "FATAL" {
+			os.Exit(1)
+		}
 	}()
 }
 
@@ -85,16 +95,21 @@ func writeln(prefixFunc prefixerSignature, log *Logger, clr *color.Color, ch cha
 			}
 			return
 		}
-		buf.Reset()
-		fmt.Fprintln(buf, args...)
-		logStruct.MessageContent = strings.TrimSpace(buf.String())
-		go func() {
-			// Send the actual message here
-			sendLogMessage(logStruct)
-			ch <- 1
-			if logStruct.MessageType == "FATAL" {
-				os.Exit(1)
-			}
-		}()
+		go sendLogMessageFromWriteln(logStruct, ch, args...)
+	}()
+}
+
+// sendLogMessageFromWriteln sends log message to server from writeln()
+func sendLogMessageFromWriteln(logStruct logMessage, ch chan int, args ...interface{}) {
+	buf := new(bytes.Buffer)
+	fmt.Fprintln(buf, args...)
+	logStruct.MessageContent = strings.TrimSpace(buf.String())
+	go func() {
+		// Send the actual message here
+		sendLogMessage(logStruct)
+		ch <- 1
+		if logStruct.MessageType == "FATAL" {
+			os.Exit(1)
+		}
 	}()
 }
