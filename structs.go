@@ -7,14 +7,23 @@ import (
 // timeFormat describes the output timestamp format
 var timeFormat = "02-01-06 03:04:05"
 
-// remoteFlagString is the parameter that needs to be set during compilation that enables/disables remote logging. Default is "true"
-var remoteFlagString = "true"
-var remoteFlag bool
-
+// remoteURL is the location where the log message is sent to
 var remoteURL = "https://logging.unaxiom.com/newlogmessage"
 
 // Logger is the main logging object
 type Logger struct {
+	OrganizationName string `json:"organization_name"`
+	ApplicationName  string `json:"application_name"`
+	RemoteAvailable  bool   // Stores if the struct needs to be pushed to the remote URL
+
+	LogLevel string // Stores the log level; values are debug, info, warning, error and critical
+	// debug --> 1
+	// info --> 2
+	// warning --> 3
+	// error --> 4
+	// critical --> 5
+	logLevelCode int // Stores the level in integer --> useful while checking if the log statement needs to be printed
+
 	fieldsToDisplays []DisplayField
 	// Customizable colors
 	// Info colors
