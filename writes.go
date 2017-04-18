@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"strings"
 
+	"os"
+
 	"github.com/fatih/color"
 )
 
@@ -14,12 +16,16 @@ type prefixerSignature func(log *Logger) (*bytes.Buffer, logMessage)
 func write(prefixFunc prefixerSignature, log *Logger, clr *color.Color, ch chan int, args ...interface{}) {
 	// Create the log that needs to be displayed on stdout
 	buf, logStruct := prefixFunc(log)
+	fmt.Println("Log type is ", logStruct.MessageType)
 	clr.Fprint(buf, args...)
 	clr.Print(buf.String())
 	go func() {
 		// Create the log message that needs to be sent to the server, only if the RemoteAvailable flag is set
 		if !log.RemoteAvailable {
 			ch <- 1
+			if logStruct.MessageType == "FATAL" {
+				os.Exit(1)
+			}
 			return
 		}
 		buf.Reset()
@@ -29,6 +35,9 @@ func write(prefixFunc prefixerSignature, log *Logger, clr *color.Color, ch chan 
 			// Send the actual message here
 			sendLogMessage(logStruct)
 			ch <- 1
+			if logStruct.MessageType == "FATAL" {
+				os.Exit(1)
+			}
 		}()
 	}()
 }
@@ -43,6 +52,9 @@ func writef(prefixFunc prefixerSignature, log *Logger, clr *color.Color, ch chan
 		// Create the log message that needs to be sent to the server, only if the RemoteAvailable flag is set
 		if !log.RemoteAvailable {
 			ch <- 1
+			if logStruct.MessageType == "FATAL" {
+				os.Exit(1)
+			}
 			return
 		}
 		buf.Reset()
@@ -52,6 +64,9 @@ func writef(prefixFunc prefixerSignature, log *Logger, clr *color.Color, ch chan
 			// Send the actual message here
 			sendLogMessage(logStruct)
 			ch <- 1
+			if logStruct.MessageType == "FATAL" {
+				os.Exit(1)
+			}
 		}()
 	}()
 }
@@ -66,6 +81,9 @@ func writeln(prefixFunc prefixerSignature, log *Logger, clr *color.Color, ch cha
 		// Create the log message that needs to be sent to the server, only if the RemoteAvailable flag is set
 		if !log.RemoteAvailable {
 			ch <- 1
+			if logStruct.MessageType == "FATAL" {
+				os.Exit(1)
+			}
 			return
 		}
 		buf.Reset()
@@ -75,6 +93,9 @@ func writeln(prefixFunc prefixerSignature, log *Logger, clr *color.Color, ch cha
 			// Send the actual message here
 			sendLogMessage(logStruct)
 			ch <- 1
+			if logStruct.MessageType == "FATAL" {
+				os.Exit(1)
+			}
 		}()
 	}()
 }
