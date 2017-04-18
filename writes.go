@@ -38,7 +38,7 @@ func sendLogMessageFromWrite(logStruct logMessage, ch chan int, args ...interfac
 	logStruct.MessageContent = strings.TrimSpace(buf.String())
 	go func() {
 		// Send the actual message here
-		sendLogMessage(logStruct)
+		pushLogMessageToQueue(logStruct)
 		ch <- 1
 		if logStruct.MessageType == "FATAL" {
 			os.Exit(1)
@@ -72,7 +72,7 @@ func sendLogMessageFromWritef(logStruct logMessage, ch chan int, format string, 
 	logStruct.MessageContent = strings.TrimSpace(buf.String())
 	go func() {
 		// Send the actual message here
-		sendLogMessage(logStruct)
+		pushLogMessageToQueue(logStruct)
 		ch <- 1
 		if logStruct.MessageType == "FATAL" {
 			os.Exit(1)
@@ -106,7 +106,7 @@ func sendLogMessageFromWriteln(logStruct logMessage, ch chan int, args ...interf
 	logStruct.MessageContent = strings.TrimSpace(buf.String())
 	go func() {
 		// Send the actual message here
-		sendLogMessage(logStruct)
+		pushLogMessageToQueue(logStruct)
 		ch <- 1
 		if logStruct.MessageType == "FATAL" {
 			os.Exit(1)
