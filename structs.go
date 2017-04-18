@@ -16,12 +16,12 @@ type Logger struct {
 	ApplicationName  string `json:"application_name"`
 	RemoteAvailable  bool   // Stores if the struct needs to be pushed to the remote URL
 
-	LogLevel string // Stores the log level; values are debug, info, warning, error and critical
+	LogLevel string // Stores the log level; values are debug, info, warning, error and fatal
 	// debug --> 1
 	// info --> 2
 	// warning --> 3
 	// error --> 4
-	// critical --> 5
+	// fatal --> 5
 	logLevelCode int // Stores the level in integer --> useful while checking if the log statement needs to be printed
 
 	fieldsToDisplays []DisplayField
@@ -46,10 +46,10 @@ type Logger struct {
 	ErrorTimeColor        *color.Color // Color of the error timestamp
 	ErrorMessageTypeColor *color.Color // Color of the message type
 
-	// Critical colors
-	CriticalColor            *color.Color // Color of the critical message
-	CriticalTimeColor        *color.Color // Color of the critical timestamp
-	CriticalMessageTypeColor *color.Color // Color of the message type
+	// fatal colors
+	FatalColor            *color.Color // Color of the fatal message
+	FatalTimeColor        *color.Color // Color of the fatal timestamp
+	FatalMessageTypeColor *color.Color // Color of the message type
 }
 
 // DisplayField stores the name and the value of the field that needs to be printed along with the log message

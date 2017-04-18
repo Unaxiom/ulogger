@@ -16,7 +16,7 @@ func New() *Logger {
 	log.InfoTimeColor = color.New(color.FgHiGreen).Add(color.Underline)
 	log.InfoMessageTypeColor = color.New(color.FgHiGreen)
 	// Set debug colors here
-	log.DebugColor = color.New(color.FgHiWhite).Add(color.BgBlue)
+	log.DebugColor = color.New(color.FgHiWhite)
 	log.DebugTimeColor = color.New(color.FgHiWhite)
 	log.DebugMessageTypeColor = color.New(color.FgHiWhite)
 	// Set warning colors here
@@ -27,10 +27,10 @@ func New() *Logger {
 	log.ErrorColor = color.New(color.FgHiBlue)
 	log.ErrorTimeColor = color.New(color.FgHiBlue)
 	log.ErrorMessageTypeColor = color.New(color.FgHiBlue)
-	// Set critical colors here
-	log.CriticalColor = color.New(color.FgHiRed)
-	log.CriticalTimeColor = color.New(color.FgHiRed)
-	log.CriticalMessageTypeColor = color.New(color.FgHiRed)
+	// Set fatal colors here
+	log.FatalColor = color.New(color.FgHiRed)
+	log.FatalTimeColor = color.New(color.FgHiRed)
+	log.FatalMessageTypeColor = color.New(color.FgHiRed)
 
 	// Set the default log level to info
 	log.LogLevel = "info"
@@ -50,7 +50,7 @@ func (log *Logger) SetLogLevel(level string) {
 		log.logLevelCode = 3
 	} else if log.LogLevel == "error" {
 		log.logLevelCode = 4
-	} else if log.LogLevel == "critical" {
+	} else if log.LogLevel == "fatal" {
 		log.logLevelCode = 5
 	}
 }
