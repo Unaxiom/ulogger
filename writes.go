@@ -16,7 +16,6 @@ type prefixerSignature func(log *Logger) (*bytes.Buffer, logMessage)
 func write(prefixFunc prefixerSignature, log *Logger, clr *color.Color, ch chan int, args ...interface{}) {
 	// Create the log that needs to be displayed on stdout
 	buf, logStruct := prefixFunc(log)
-	fmt.Println("Log type is ", logStruct.MessageType)
 	clr.Fprint(buf, args...)
 	clr.Print(buf.String())
 	go func() {
