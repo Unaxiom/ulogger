@@ -8,6 +8,13 @@ import (
 // Debug displays a debugging message useful in development environment
 func (log *Logger) Debug(args ...interface{}) {
 	if log.logLevelCode > 1 {
+		if log.RemoteAvailable {
+			// Create the logMessage struct here
+			logStruct, _ := generateTimestamp("DEBUG")
+			ch := make(chan int)
+			go sendLogMessageFromWrite(logStruct, ch, args...)
+			<-ch
+		}
 		return
 	}
 	ch := make(chan int)
@@ -20,6 +27,13 @@ func (log *Logger) Debug(args ...interface{}) {
 // Debugf displays a debugging message
 func (log *Logger) Debugf(format string, args ...interface{}) {
 	if log.logLevelCode > 1 {
+		if log.RemoteAvailable {
+			// Create the logMessage struct here
+			logStruct, _ := generateTimestamp("DEBUG")
+			ch := make(chan int)
+			go sendLogMessageFromWritef(logStruct, ch, format, args...)
+			<-ch
+		}
 		return
 	}
 	ch := make(chan int)
@@ -32,6 +46,13 @@ func (log *Logger) Debugf(format string, args ...interface{}) {
 // Debugln displays a debugging message
 func (log *Logger) Debugln(args ...interface{}) {
 	if log.logLevelCode > 1 {
+		if log.RemoteAvailable {
+			// Create the logMessage struct here
+			logStruct, _ := generateTimestamp("DEBUG")
+			ch := make(chan int)
+			go sendLogMessageFromWriteln(logStruct, ch, args...)
+			<-ch
+		}
 		return
 	}
 	ch := make(chan int)
@@ -44,8 +65,7 @@ func (log *Logger) Debugln(args ...interface{}) {
 // Returns a string, along with a logMessage after prefixing the timestamp and the type of log
 func debugPrefix(log *Logger) (*bytes.Buffer, logMessage) {
 	buf := new(bytes.Buffer)
-	logStruct, timestamp := generateTimestamp()
-	logStruct.MessageType = "DEBUG"
+	logStruct, timestamp := generateTimestamp("DEBUG")
 	log.DebugTimeColor.Fprint(buf, timestamp.Format(timeFormat))
 	fmt.Fprint(buf, " ")
 	log.DebugMessageTypeColor.Fprint(buf, logStruct.MessageType)
