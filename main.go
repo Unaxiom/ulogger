@@ -3,14 +3,10 @@ package ulogger
 import (
 	"time"
 
+	"fmt"
+
 	"github.com/fatih/color"
 )
-
-func init() {
-	if remoteFlagString == "true" {
-		remoteFlag = true
-	}
-}
 
 // New returns a logger object
 func New() *Logger {
@@ -35,7 +31,28 @@ func New() *Logger {
 	log.CriticalColor = color.New(color.FgHiRed)
 	log.CriticalTimeColor = color.New(color.FgHiRed)
 	log.CriticalMessageTypeColor = color.New(color.FgHiRed)
+
+	// Set the default log level to info
+	log.LogLevel = "info"
+	log.SetLogLevel(log.LogLevel)
+
 	return log
+}
+
+// SetLogLevel sets the log level of the logger
+func (log *Logger) SetLogLevel(level string) {
+	log.LogLevel = level
+	if log.LogLevel == "debug" {
+		log.logLevelCode = 1
+	} else if log.LogLevel == "info" {
+		log.logLevelCode = 2
+	} else if log.LogLevel == "warning" {
+		log.logLevelCode = 3
+	} else if log.LogLevel == "error" {
+		log.logLevelCode = 4
+	} else if log.LogLevel == "critical" {
+		log.logLevelCode = 5
+	}
 }
 
 // WithFields adds the passed fields and attaches them to the logging object
@@ -55,9 +72,7 @@ func generateTimestamp() (logMessage, time.Time) {
 
 // sendLogMessage sends the logMessage to the remote URL, if the REMOTE_FLAG is set
 func sendLogMessage(log logMessage) {
-	if remoteFlag {
-		// Push the message to the remote URL
-		// Also, attach the organization name and the application name here, before composing a new struct
-
-	}
+	// Push the message to the remote URL
+	// Also, attach the organization name and the application name here, before composing a new struct
+	fmt.Printf("Sending Log Message %#v\n\n", log)
 }
