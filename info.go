@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-// Info displays a non-critical log message
+// Info displays a non-fatal log message
 func (log *Logger) Info(args ...interface{}) {
 	if log.logLevelCode < 1 {
 		return
@@ -37,7 +37,7 @@ func (log *Logger) Info(args ...interface{}) {
 	<-ch
 }
 
-// Infof displays a non-critical log message according to the format string
+// Infof displays a non-fatal log message according to the format string
 func (log *Logger) Infof(format string, args ...interface{}) {
 	if log.logLevelCode < 1 {
 		return
@@ -68,7 +68,7 @@ func (log *Logger) Infof(format string, args ...interface{}) {
 	<-ch
 }
 
-// Infoln displays a non-critical log message
+// Infoln displays a non-fatal log message
 func (log *Logger) Infoln(args ...interface{}) {
 	if log.logLevelCode < 1 {
 		return
