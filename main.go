@@ -13,24 +13,24 @@ func New() *Logger {
 	log := new(Logger)
 	// Set info colors here
 	log.InfoColor = color.New(color.FgHiGreen)
-	log.InfoTimeColor = color.New(color.FgHiGreen).Add(color.Underline)
-	log.InfoMessageTypeColor = color.New(color.FgHiGreen)
+	log.InfoTimeColor = color.New(color.FgHiGreen)
+	log.InfoMessageTypeColor = color.New(color.FgHiGreen).Add(color.BgHiBlack)
 	// Set debug colors here
 	log.DebugColor = color.New(color.FgHiWhite)
 	log.DebugTimeColor = color.New(color.FgHiWhite)
-	log.DebugMessageTypeColor = color.New(color.FgHiWhite)
+	log.DebugMessageTypeColor = color.New(color.FgHiWhite).Add(color.BgHiBlack)
 	// Set warning colors here
 	log.WarningColor = color.New(color.FgHiYellow)
 	log.WarningTimeColor = color.New(color.FgHiYellow)
-	log.WarningMessageTypeColor = color.New(color.FgHiYellow)
+	log.WarningMessageTypeColor = color.New(color.FgHiYellow).Add(color.BgHiBlack)
 	// Set error colors here
 	log.ErrorColor = color.New(color.FgHiBlue)
 	log.ErrorTimeColor = color.New(color.FgHiBlue)
-	log.ErrorMessageTypeColor = color.New(color.FgHiBlue)
+	log.ErrorMessageTypeColor = color.New(color.FgHiBlue).Add(color.BgHiBlack)
 	// Set fatal colors here
 	log.FatalColor = color.New(color.FgHiRed)
 	log.FatalTimeColor = color.New(color.FgHiRed)
-	log.FatalMessageTypeColor = color.New(color.FgHiRed)
+	log.FatalMessageTypeColor = color.New(color.FgHiRed).Add(color.BgWhite)
 
 	// Set the default log level to info
 	log.LogLevel = "info"
