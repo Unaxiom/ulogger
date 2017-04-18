@@ -52,6 +52,10 @@ func (log *Logger) SetLogLevel(level string) {
 		log.logLevelCode = 4
 	} else if log.LogLevel == "fatal" {
 		log.logLevelCode = 5
+	} else {
+		// Default case is set to 'info'
+		log.LogLevel = "info"
+		log.SetLogLevel(log.LogLevel)
 	}
 }
 
