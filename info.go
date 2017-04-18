@@ -8,6 +8,13 @@ import (
 // Info displays a non-fatal log message
 func (log *Logger) Info(args ...interface{}) {
 	if log.logLevelCode > 2 {
+		if log.RemoteAvailable {
+			// Create the logMessage struct here
+			logStruct, _ := generateTimestamp("INFO")
+			ch := make(chan int)
+			go sendLogMessageFromWrite(logStruct, ch, args...)
+			<-ch
+		}
 		return
 	}
 	ch := make(chan int)
@@ -20,6 +27,13 @@ func (log *Logger) Info(args ...interface{}) {
 // Infof displays a non-fatal log message according to the format string
 func (log *Logger) Infof(format string, args ...interface{}) {
 	if log.logLevelCode > 2 {
+		if log.RemoteAvailable {
+			// Create the logMessage struct here
+			logStruct, _ := generateTimestamp("INFO")
+			ch := make(chan int)
+			go sendLogMessageFromWritef(logStruct, ch, format, args...)
+			<-ch
+		}
 		return
 	}
 	ch := make(chan int)
@@ -32,6 +46,13 @@ func (log *Logger) Infof(format string, args ...interface{}) {
 // Infoln displays a non-fatal log message
 func (log *Logger) Infoln(args ...interface{}) {
 	if log.logLevelCode > 2 {
+		if log.RemoteAvailable {
+			// Create the logMessage struct here
+			logStruct, _ := generateTimestamp("INFO")
+			ch := make(chan int)
+			go sendLogMessageFromWriteln(logStruct, ch, args...)
+			<-ch
+		}
 		return
 	}
 	ch := make(chan int)
@@ -44,8 +65,7 @@ func (log *Logger) Infoln(args ...interface{}) {
 // Returns a string, along with a logMessage after prefixing the timestamp and the type of log
 func infoPrefix(log *Logger) (*bytes.Buffer, logMessage) {
 	buf := new(bytes.Buffer)
-	logStruct, timestamp := generateTimestamp()
-	logStruct.MessageType = "INFO"
+	logStruct, timestamp := generateTimestamp("INFO")
 	log.InfoTimeColor.Fprint(buf, timestamp.Format(timeFormat))
 	fmt.Fprint(buf, " ")
 	log.InfoMessageTypeColor.Fprint(buf, logStruct.MessageType)
