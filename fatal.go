@@ -8,6 +8,13 @@ import (
 // Fatal displays a message and crashes the program
 func (log *Logger) Fatal(args ...interface{}) {
 	if log.logLevelCode > 5 {
+		if log.RemoteAvailable {
+			// Create the logMessage struct here
+			logStruct, _ := generateTimestamp("FATAL")
+			ch := make(chan int)
+			go sendLogMessageFromWrite(logStruct, ch, args...)
+			<-ch
+		}
 		return
 	}
 	ch := make(chan int)
@@ -20,6 +27,13 @@ func (log *Logger) Fatal(args ...interface{}) {
 // Fatalf displays a message and crashes the program
 func (log *Logger) Fatalf(format string, args ...interface{}) {
 	if log.logLevelCode > 5 {
+		if log.RemoteAvailable {
+			// Create the logMessage struct here
+			logStruct, _ := generateTimestamp("FATAL")
+			ch := make(chan int)
+			go sendLogMessageFromWritef(logStruct, ch, format, args...)
+			<-ch
+		}
 		return
 	}
 	ch := make(chan int)
@@ -32,6 +46,13 @@ func (log *Logger) Fatalf(format string, args ...interface{}) {
 // Fatalln displays a message and crashes the program
 func (log *Logger) Fatalln(args ...interface{}) {
 	if log.logLevelCode > 5 {
+		if log.RemoteAvailable {
+			// Create the logMessage struct here
+			logStruct, _ := generateTimestamp("FATAL")
+			ch := make(chan int)
+			go sendLogMessageFromWriteln(logStruct, ch, args...)
+			<-ch
+		}
 		return
 	}
 	ch := make(chan int)
@@ -44,8 +65,7 @@ func (log *Logger) Fatalln(args ...interface{}) {
 // Returns a string, along with a logMessage after prefixing the timestamp and the type of log
 func fatalPrefix(log *Logger) (*bytes.Buffer, logMessage) {
 	buf := new(bytes.Buffer)
-	logStruct, timestamp := generateTimestamp()
-	logStruct.MessageType = "FATAL"
+	logStruct, timestamp := generateTimestamp("FATAL")
 	log.FatalTimeColor.Fprint(buf, timestamp.Format(timeFormat))
 	fmt.Fprint(buf, " ")
 	log.FatalMessageTypeColor.Fprint(buf, logStruct.MessageType)
