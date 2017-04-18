@@ -7,7 +7,7 @@ import (
 
 // Info displays a non-fatal log message
 func (log *Logger) Info(args ...interface{}) {
-	if log.logLevelCode < 1 {
+	if log.logLevelCode > 2 {
 		return
 	}
 	ch := make(chan int)
@@ -19,7 +19,7 @@ func (log *Logger) Info(args ...interface{}) {
 
 // Infof displays a non-fatal log message according to the format string
 func (log *Logger) Infof(format string, args ...interface{}) {
-	if log.logLevelCode < 1 {
+	if log.logLevelCode > 2 {
 		return
 	}
 	ch := make(chan int)
@@ -31,7 +31,7 @@ func (log *Logger) Infof(format string, args ...interface{}) {
 
 // Infoln displays a non-fatal log message
 func (log *Logger) Infoln(args ...interface{}) {
-	if log.logLevelCode < 1 {
+	if log.logLevelCode > 2 {
 		return
 	}
 	ch := make(chan int)

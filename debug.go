@@ -7,7 +7,7 @@ import (
 
 // Debug displays a debugging message useful in development environment
 func (log *Logger) Debug(args ...interface{}) {
-	if log.logLevelCode < 1 {
+	if log.logLevelCode > 1 {
 		return
 	}
 	ch := make(chan int)
@@ -19,7 +19,7 @@ func (log *Logger) Debug(args ...interface{}) {
 
 // Debugf displays a debugging message
 func (log *Logger) Debugf(format string, args ...interface{}) {
-	if log.logLevelCode < 1 {
+	if log.logLevelCode > 1 {
 		return
 	}
 	ch := make(chan int)
@@ -31,7 +31,7 @@ func (log *Logger) Debugf(format string, args ...interface{}) {
 
 // Debugln displays a debugging message
 func (log *Logger) Debugln(args ...interface{}) {
-	if log.logLevelCode < 1 {
+	if log.logLevelCode > 1 {
 		return
 	}
 	ch := make(chan int)

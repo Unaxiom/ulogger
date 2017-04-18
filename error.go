@@ -7,7 +7,7 @@ import (
 
 // Error displays an error message
 func (log *Logger) Error(args ...interface{}) {
-	if log.logLevelCode < 1 {
+	if log.logLevelCode > 4 {
 		return
 	}
 	ch := make(chan int)
@@ -19,7 +19,7 @@ func (log *Logger) Error(args ...interface{}) {
 
 // Errorf displays an error message
 func (log *Logger) Errorf(format string, args ...interface{}) {
-	if log.logLevelCode < 1 {
+	if log.logLevelCode > 4 {
 		return
 	}
 	ch := make(chan int)
@@ -31,7 +31,7 @@ func (log *Logger) Errorf(format string, args ...interface{}) {
 
 // Errorln displays an error message
 func (log *Logger) Errorln(args ...interface{}) {
-	if log.logLevelCode < 1 {
+	if log.logLevelCode > 4 {
 		return
 	}
 	ch := make(chan int)

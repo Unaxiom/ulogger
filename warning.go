@@ -7,7 +7,7 @@ import (
 
 // Warning displays a warning message
 func (log *Logger) Warning(args ...interface{}) {
-	if log.logLevelCode < 1 {
+	if log.logLevelCode > 3 {
 		return
 	}
 	ch := make(chan int)
@@ -19,7 +19,7 @@ func (log *Logger) Warning(args ...interface{}) {
 
 // Warningf displays a warning message
 func (log *Logger) Warningf(format string, args ...interface{}) {
-	if log.logLevelCode < 1 {
+	if log.logLevelCode > 3 {
 		return
 	}
 	ch := make(chan int)
@@ -31,7 +31,7 @@ func (log *Logger) Warningf(format string, args ...interface{}) {
 
 // Warningln displays a warning message
 func (log *Logger) Warningln(args ...interface{}) {
-	if log.logLevelCode < 1 {
+	if log.logLevelCode > 3 {
 		return
 	}
 	ch := make(chan int)

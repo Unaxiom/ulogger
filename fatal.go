@@ -7,7 +7,7 @@ import (
 
 // Fatal displays a message and crashes the program
 func (log *Logger) Fatal(args ...interface{}) {
-	if log.logLevelCode < 1 {
+	if log.logLevelCode > 5 {
 		return
 	}
 	ch := make(chan int)
@@ -19,7 +19,7 @@ func (log *Logger) Fatal(args ...interface{}) {
 
 // Fatalf displays a message and crashes the program
 func (log *Logger) Fatalf(format string, args ...interface{}) {
-	if log.logLevelCode < 1 {
+	if log.logLevelCode > 5 {
 		return
 	}
 	ch := make(chan int)
@@ -31,7 +31,7 @@ func (log *Logger) Fatalf(format string, args ...interface{}) {
 
 // Fatalln displays a message and crashes the program
 func (log *Logger) Fatalln(args ...interface{}) {
-	if log.logLevelCode < 1 {
+	if log.logLevelCode > 5 {
 		return
 	}
 	ch := make(chan int)
