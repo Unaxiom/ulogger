@@ -67,16 +67,22 @@ func (log *Logger) WithFields(fields []DisplayField) {
 }
 
 // generateTimestamp returns a logMessage along with the time of creation of this log.
-func generateTimestamp() (logMessage, time.Time) {
+func generateTimestamp(messageType string) (logMessage, time.Time) {
 	var log logMessage
 	var timestamp = time.Now()
 	log.Timestamp = timestamp.Unix()
+	log.MessageType = messageType
 	return log, timestamp
 }
 
-// sendLogMessage sends the logMessage to the remote URL, if the REMOTE_FLAG is set
-func sendLogMessage(log logMessage) {
-	// Push the message to the remote URL
+// pushLogMessageToQueue pushes the logMessage to the appropriate queue
+func pushLogMessageToQueue(log logMessage) {
 	// Also, attach the organization name and the application name here, before composing a new struct
+	// Then, acquire the appropriate queue's lock, and push the log message
 	fmt.Printf("Sending Log Message %#v\n\n", log)
+}
+
+func postLogMessageToServer(log logMessage) {
+	// Push the message to the remote URL
+	// This function needs should either poll for log messages from the appropriate queues and push to the server
 }
