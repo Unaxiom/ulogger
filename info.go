@@ -8,8 +8,9 @@ import (
 
 // Info displays a non-critical log message
 func (log *Logger) Info(args ...interface{}) {
-	// infoColor.Print(time.Now().Format("02-01-06 03:04:05"), "\t", args)
-	// infoColor.Fprintf()
+	if log.logLevelCode < 1 {
+		return
+	}
 	ch := make(chan int)
 	go func(ch chan int) {
 		buf := new(bytes.Buffer)
@@ -21,30 +22,60 @@ func (log *Logger) Info(args ...interface{}) {
 
 // Infof displays a non-critical log message according to the format string
 func (log *Logger) Infof(format string, args ...interface{}) {
+	if log.logLevelCode < 1 {
+		return
+	}
 	// Using Print instead of Printf, since the format string would be taken into account in the writeToPrintf method
 	ch := make(chan int)
 	go func(ch chan int) {
-		buf := new(bytes.Buffer)
-		log.InfoColor.Print(log.writeToPrintf(buf, format, args...))
-		ch <- 1
+		// Create the log that needs to be displayed on stdout
+		buf, logStruct := infoPrefix(log)
+		log.InfoColor.Fprintf(buf, format, args...)
+		log.InfoColor.Print(buf.String())
+
+		go func() {
+			// Create the log message that needs to be sent to the server, only if the RemoteAvailable flag is set
+			if !log.RemoteAvailable {
+				ch <- 1
+				return
+			}
+			buf.Reset()
+			fmt.Fprintf(buf, format, args...)
+			logStruct.MessageContent = strings.TrimSpace(buf.String())
+			go func() {
+				sendLogMessage(logStruct)
+				ch <- 1
+			}()
+		}()
 	}(ch)
 	<-ch
-
 }
 
 // Infoln displays a non-critical log message
 func (log *Logger) Infoln(args ...interface{}) {
+	if log.logLevelCode < 1 {
+		return
+	}
 	ch := make(chan int)
 	go func(ch chan int) {
+		// Create the log that needs to be displayed on stdout
 		buf, logStruct := infoPrefix(log)
 		log.InfoColor.Fprint(buf, args...)
 		log.InfoColor.Println(buf.String())
 		go func() {
+			// Create the log message that needs to be sent to the server, only if the RemoteAvailable flag is set
+			if !log.RemoteAvailable {
+				ch <- 1
+				return
+			}
 			buf.Reset()
 			fmt.Fprintln(buf, args...)
 			logStruct.MessageContent = strings.TrimSpace(buf.String())
-			go sendLogMessage(logStruct)
-			ch <- 1
+			go func() {
+				// Send the actual message here
+				sendLogMessage(logStruct)
+				ch <- 1
+			}()
 		}()
 	}(ch)
 	<-ch
@@ -57,7 +88,6 @@ func infoPrefix(log *Logger) (*bytes.Buffer, logMessage) {
 	logStruct.MessageType = "INFO"
 	log.InfoTimeColor.Fprint(buf, timestamp.Format(timeFormat))
 	fmt.Fprint(buf, " ")
-	// fmt.Println("Byte Counter has become ", byteCounter1)
 	log.InfoMessageTypeColor.Fprint(buf, logStruct.MessageType)
 	fmt.Fprint(buf, " ")
 
