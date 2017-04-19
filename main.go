@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/fatih/color"
+	"github.com/franela/goreq"
 )
 
 // New returns a logger object
@@ -62,7 +63,7 @@ func (log *Logger) SetLogLevel(level string) {
 // WithFields adds the passed fields and attaches them to the logging object
 func (log *Logger) WithFields(fields []DisplayField) {
 	for _, field := range fields {
-		log.fieldsToDisplays = append(log.fieldsToDisplays, field)
+		log.fieldsToDisplay = append(log.fieldsToDisplay, field)
 	}
 }
 
@@ -75,14 +76,63 @@ func generateTimestamp(messageType string) (logMessage, time.Time) {
 	return log, timestamp
 }
 
+// attachDisplayFields is supposed to add all the display fields to the log message, but it isn't working currently
+// func attachDisplayFields(buf *bytes.Buffer, clr *color.Color, fieldsToDisplay []DisplayField) {
+// 	for _, field := range fieldsToDisplay {
+// 		// fmt.Println(reflect.TypeOf(field.Value).Kind())
+// 		var value interface{}
+
+// 		if reflect.TypeOf(field.Value).Kind() == reflect.Func {
+// 			fmt.Println("Found function here")
+// 			fmt.Println(field.Value.(func() int64)())
+// 		}
+// 		clr.Fprint(buf, field.Name, " : ", value, " ")
+// 	}
+// }
+
 // pushLogMessageToQueue pushes the logMessage to the appropriate queue
 func pushLogMessageToQueue(log logMessage) {
 	// Also, attach the organization name and the application name here, before composing a new struct
+	// Also attach the persistent fields that need to be sent, if any
 	// Then, acquire the appropriate queue's lock, and push the log message
-	fmt.Printf("Sending Log Message %#v\n\n", log)
+
+	if log.MessageType == "DEBUG" {
+		// Batch stream the message
+		go debugLogs.addLog(log)
+	} else if log.MessageType == "INFO" {
+		// Batch stream the message
+		go infoLogs.addLog(log)
+	} else if log.MessageType == "WARNING" {
+		// Stream the message immediately
+		go postLogMessageToServer([]logMessage{log})
+	} else if log.MessageType == "ERROR" {
+		// Stream the message immediately
+		go postLogMessageToServer([]logMessage{log})
+	} else if log.MessageType == "FATAL" {
+		// Stream the message immediately
+		go postLogMessageToServer([]logMessage{log})
+	}
 }
 
-func postLogMessageToServer(log logMessage) {
+func postLogMessageToServer(log []logMessage) {
 	// Push the message to the remote URL
 	// This function needs should either poll for log messages from the appropriate queues and push to the server
+	// fmt.Printf("Sending Log Message %#v\n\n", log)
+	var message postMessage
+	message.MessageTag = "Incoming Log"
+	message.LogList = log
+
+	logRequest := goreq.Request{
+		Uri:         remoteURL,
+		Method:      "POST",
+		Accept:      "application/json",
+		ContentType: "application/json",
+		Body:        message,
+	}
+	go func() {
+		_, err := logRequest.Do()
+		if err != nil {
+			fmt.Println("While sending messages, error is ", err.Error())
+		}
+	}()
 }
