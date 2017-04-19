@@ -1,6 +1,8 @@
 package ulogger
 
 import (
+	"sync"
+
 	"github.com/fatih/color"
 )
 
@@ -24,7 +26,7 @@ type Logger struct {
 	// fatal --> 5
 	logLevelCode int // Stores the level in integer --> useful while checking if the log statement needs to be printed
 
-	fieldsToDisplays []DisplayField
+	fieldsToDisplay []DisplayField
 	// Customizable colors
 	// Info colors
 	InfoColor            *color.Color // Color of the info message
@@ -60,7 +62,54 @@ type DisplayField struct {
 
 // logMessage is the internal struct that is posted to the remote log server
 type logMessage struct {
-	MessageType    string `json:"message_type"`
-	Timestamp      int64  `json:"timestamp"`
-	MessageContent string `json:"message_content"`
+	MessageType      string `json:"message_type"`
+	Timestamp        int64  `json:"timestamp"`
+	MessageContent   string `json:"message_content"`
+	OrganizationName string `json:"organization_name"`
+	ApplicationName  string `json:"application_name"`
+}
+
+var debugMutex sync.Mutex
+
+type debugLogStruct struct {
+	logList []logMessage
+}
+
+var debugLogs debugLogStruct
+
+// addLog adds the log statement to the logList
+func (list *debugLogStruct) addLog(log logMessage) {
+	debugMutex.Lock()
+	list.logList = append(list.logList, log)
+	if len(list.logList) >= 5 {
+		listToSend := list.logList[:]
+		go postLogMessageToServer(listToSend)
+		list.logList = []logMessage{}
+	}
+	debugMutex.Unlock()
+}
+
+var infoMutex sync.Mutex
+
+type infoLogStruct struct {
+	logList []logMessage
+}
+
+var infoLogs infoLogStruct
+
+// addLog adds the log statement to the logList
+func (list *infoLogStruct) addLog(log logMessage) {
+	infoMutex.Lock()
+	list.logList = append(list.logList, log)
+	if len(list.logList) >= 5 {
+		listToSend := list.logList[:]
+		go postLogMessageToServer(listToSend)
+		list.logList = []logMessage{}
+	}
+	infoMutex.Unlock()
+}
+
+type postMessage struct {
+	MessageTag string       `json:"message_tag"`
+	LogList    []logMessage `json:"log_list"`
 }
