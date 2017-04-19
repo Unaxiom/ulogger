@@ -66,6 +66,8 @@ func (log *Logger) Warningln(args ...interface{}) {
 func warningPrefix(log *Logger) (*bytes.Buffer, logMessage) {
 	buf := new(bytes.Buffer)
 	logStruct, timestamp := generateTimestamp("WARNING")
+	logStruct.OrganizationName = log.OrganizationName
+	logStruct.ApplicationName = log.ApplicationName
 	log.WarningTimeColor.Fprint(buf, timestamp.Format(timeFormat))
 	fmt.Fprint(buf, " ")
 	log.WarningMessageTypeColor.Fprint(buf, logStruct.MessageType)

@@ -66,6 +66,8 @@ func (log *Logger) Fatalln(args ...interface{}) {
 func fatalPrefix(log *Logger) (*bytes.Buffer, logMessage) {
 	buf := new(bytes.Buffer)
 	logStruct, timestamp := generateTimestamp("FATAL")
+	logStruct.OrganizationName = log.OrganizationName
+	logStruct.ApplicationName = log.ApplicationName
 	log.FatalTimeColor.Fprint(buf, timestamp.Format(timeFormat))
 	fmt.Fprint(buf, " ")
 	log.FatalMessageTypeColor.Fprint(buf, logStruct.MessageType)

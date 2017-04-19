@@ -68,6 +68,8 @@ func (log *Logger) Errorln(args ...interface{}) {
 func errorPrefix(log *Logger) (*bytes.Buffer, logMessage) {
 	buf := new(bytes.Buffer)
 	logStruct, timestamp := generateTimestamp("ERROR")
+	logStruct.OrganizationName = log.OrganizationName
+	logStruct.ApplicationName = log.ApplicationName
 	log.ErrorTimeColor.Fprint(buf, timestamp.Format(timeFormat))
 	fmt.Fprint(buf, " ")
 	log.ErrorMessageTypeColor.Fprint(buf, logStruct.MessageType)

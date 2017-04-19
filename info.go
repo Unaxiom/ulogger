@@ -66,9 +66,13 @@ func (log *Logger) Infoln(args ...interface{}) {
 func infoPrefix(log *Logger) (*bytes.Buffer, logMessage) {
 	buf := new(bytes.Buffer)
 	logStruct, timestamp := generateTimestamp("INFO")
+	logStruct.OrganizationName = log.OrganizationName
+	logStruct.ApplicationName = log.ApplicationName
 	log.InfoTimeColor.Fprint(buf, timestamp.Format(timeFormat))
 	fmt.Fprint(buf, " ")
 	log.InfoMessageTypeColor.Fprint(buf, logStruct.MessageType)
 	fmt.Fprint(buf, " ")
+	// Attach the display fields here
+	// attachDisplayFields(buf, log.InfoColor, log.fieldsToDisplay)
 	return buf, logStruct
 }

@@ -66,6 +66,8 @@ func (log *Logger) Debugln(args ...interface{}) {
 func debugPrefix(log *Logger) (*bytes.Buffer, logMessage) {
 	buf := new(bytes.Buffer)
 	logStruct, timestamp := generateTimestamp("DEBUG")
+	logStruct.OrganizationName = log.OrganizationName
+	logStruct.ApplicationName = log.ApplicationName
 	log.DebugTimeColor.Fprint(buf, timestamp.Format(timeFormat))
 	fmt.Fprint(buf, " ")
 	log.DebugMessageTypeColor.Fprint(buf, logStruct.MessageType)
