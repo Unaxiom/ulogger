@@ -8,7 +8,7 @@ import "ulogger"
 
 func main() {
     log := ulogger.New()
-    log.SetLogLevel("debug") // Possible values are "debug"(least), "info", "warning", "error", "fatal" (highest), in ascending order, with "info being the default"
+    log.SetLogLevel("debug") // Possible values are "debug"(least), "info", "warning", "error", "fatal" (highest), in ascending order, with "info" being the default
     log.RemoteAvailable = true // Defines whether logs need to the be streamed to the remote URL
     log.ApplicationName = "Temp Debugger" // Sets the applicaton name
     log.OrganizationName = "New org" // Sets the organization name that this build is licensed to
