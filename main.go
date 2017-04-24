@@ -5,6 +5,8 @@ import (
 
 	"fmt"
 
+	commonStructs "ulogger/structs"
+
 	"github.com/fatih/color"
 	"github.com/franela/goreq"
 )
@@ -120,7 +122,15 @@ func postLogMessageToServer(log []logMessage) {
 	// fmt.Printf("Sending Log Message %#v\n\n", log)
 	var message postMessage
 	message.MessageTag = "Incoming Log"
-	message.LogList = log
+	for _, individualLog := range log {
+		var localLog commonStructs.LogMessage
+		localLog.ApplicationName = individualLog.ApplicationName
+		localLog.MessageContent = individualLog.MessageContent
+		localLog.MessageType = individualLog.MessageType
+		localLog.OrganizationName = individualLog.OrganizationName
+		localLog.Timestamp = individualLog.Timestamp
+		message.LogList = append(message.LogList, localLog)
+	}
 
 	logRequest := goreq.Request{
 		Uri:         remoteURL,
