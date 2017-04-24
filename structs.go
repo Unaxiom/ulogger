@@ -3,11 +3,21 @@ package ulogger
 import (
 	"sync"
 
+	commonStructs "ulogger/structs"
+
 	"github.com/fatih/color"
 )
 
 // timeFormat describes the output timestamp format
 var timeFormat = "02-01-06 03:04:05"
+
+type logMessage struct {
+	commonStructs.LogMessage
+}
+
+type postMessage struct {
+	commonStructs.PostMessage
+}
 
 // remoteURL is the location where the log message is sent to
 var remoteURL = "https://logging.unaxiom.com/newlogmessage"
@@ -60,15 +70,6 @@ type DisplayField struct {
 	Value interface{}
 }
 
-// logMessage is the internal struct that is posted to the remote log server
-type logMessage struct {
-	MessageType      string `json:"message_type"`
-	Timestamp        int64  `json:"timestamp"`
-	MessageContent   string `json:"message_content"`
-	OrganizationName string `json:"organization_name"`
-	ApplicationName  string `json:"application_name"`
-}
-
 var debugMutex sync.Mutex
 
 type debugLogStruct struct {
@@ -107,9 +108,4 @@ func (list *infoLogStruct) addLog(log logMessage) {
 		list.logList = []logMessage{}
 	}
 	infoMutex.Unlock()
-}
-
-type postMessage struct {
-	MessageTag string       `json:"message_tag"`
-	LogList    []logMessage `json:"log_list"`
 }
