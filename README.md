@@ -1,10 +1,10 @@
 # ulogger
 
-A custom logger to be used for all projects at Unaxiom.
+A custom logger that can be configured with different output colors. It can also stream logs to a remote URL.
 
 # Usage
 ```
-import "ulogger"
+import "github.com/Unaxiom/ulogger"
 
 func main() {
     log := ulogger.New()
@@ -12,7 +12,7 @@ func main() {
     log.RemoteAvailable = true // Defines whether logs need to the be streamed to the remote URL
     log.ApplicationName = "Temp Debugger" // Sets the applicaton name
     log.OrganizationName = "New org" // Sets the organization name that this build is licensed to
-    ulogger.RemoteURL = "https://example.com" // Sets the remote URL where the log message needs to be sent via a POST request. If this is not set, and if log.RemoteAvailability is true, then the default URL is "https://log.unaxiom.com/newlog"
+    ulogger.RemoteURL = "https://example.com" // Sets the remote URL where the log message needs to be sent via a POST request. If this is not set, and if log.RemoteAvailability is true, then the default URL is ""
 }
 ```
 
@@ -62,7 +62,7 @@ log.FatalColor
 log.FatalTimeColor
 log.FatalMessageTypeColor
 ```
-Each of these values could be assigned an color from the package `github.com/fatih/color`.
+Each of these values could be assigned an color from the package [`github.com/fatih/color`](https://github.com/fatih/color).
 
 # Disabling remote logging
 Remote logging can be disabled by setting `log.RemoteAvailable` to `false`.
