@@ -22,6 +22,8 @@ type postMessage struct {
 // remoteURL is the location where the log message is sent to
 var remoteURL = "https://log.unaxiom.com/newlog"
 
+// var remoteURL = "http://localhost:13000/newlog"
+
 // Logger is the main logging object
 type Logger struct {
 	OrganizationName string `json:"organization_name"`
