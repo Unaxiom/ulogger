@@ -5,7 +5,7 @@ import (
 
 	"fmt"
 
-	commonStructs "ulogger/structs"
+	commonStructs "github.com/Unaxiom/ulogger/structs"
 
 	"github.com/fatih/color"
 	"github.com/franela/goreq"

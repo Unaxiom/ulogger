@@ -3,7 +3,7 @@ package ulogger
 import (
 	"sync"
 
-	commonStructs "ulogger/structs"
+	commonStructs "github.com/Unaxiom/ulogger/structs"
 
 	"github.com/fatih/color"
 )
