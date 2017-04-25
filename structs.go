@@ -20,7 +20,7 @@ type postMessage struct {
 }
 
 // RemoteURL is the location where the log message is sent to
-var RemoteURL = "https://log.unaxiom.com/newlog"
+var RemoteURL = ""
 
 // var RemoteURL = "http://localhost:13000/newlog"
 
