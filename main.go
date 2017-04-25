@@ -133,7 +133,7 @@ func postLogMessageToServer(log []logMessage) {
 	}
 
 	logRequest := goreq.Request{
-		Uri:         remoteURL,
+		Uri:         RemoteURL,
 		Method:      "POST",
 		Accept:      "application/json",
 		ContentType: "application/json",

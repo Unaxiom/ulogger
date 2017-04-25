@@ -12,6 +12,7 @@ func main() {
     log.RemoteAvailable = true // Defines whether logs need to the be streamed to the remote URL
     log.ApplicationName = "Temp Debugger" // Sets the applicaton name
     log.OrganizationName = "New org" // Sets the organization name that this build is licensed to
+    ulogger.RemoteURL = "https://example.com" // Sets the remote URL where the log message needs to be sent via a POST request. If this is not set, and if log.RemoteAvailability is true, then the default URL is "https://log.unaxiom.com/newlog"
 }
 ```
 
@@ -62,3 +63,9 @@ log.FatalTimeColor
 log.FatalMessageTypeColor
 ```
 Each of these values could be assigned an color from the package `github.com/fatih/color`.
+
+# Disabling remote logging
+Remote logging can be disabled by setting `log.RemoteAvailable` to `false`.
+
+# Send log messages to custom URL
+If `log.RemoteAvailable` is set to `true`, then log messages are sent via a `POST` request to the URL. In case the URL needs to be changed, then it can be done so by updating `ulogger.RemoteURL` to the appropriate URL string. These messages would be sent via goroutines, so the execution will not be blocked.
