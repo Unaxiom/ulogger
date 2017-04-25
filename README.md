@@ -1,6 +1,6 @@
 # ulogger
 
-A custom logger that can be configured with different output colors. It can also stream logs to a remote URL.
+A custom logger that can be configured with different output colors. It can also stream logs to a remote URL. Take a look at the [documentation](https://godoc.org/github.com/Unaxiom/ulogger).
 
 # Usage
 ```
