@@ -24,6 +24,21 @@ var RemoteURL = ""
 
 // var RemoteURL = "http://localhost:13000/newlog"
 
+// DebugLevel denotes a shorthand notation for setting log level to 'debug'
+const DebugLevel = "debug"
+
+// InfoLevel denotes a shorthand notation for setting log level to 'info'
+const InfoLevel = "info"
+
+// WarningLevel denotes a shorthand notation for setting log level to 'warning'
+const WarningLevel = "warning"
+
+// ErrorLevel denotes a shorthand notation for setting log level to 'error'
+const ErrorLevel = "error"
+
+// FatalLevel denotes a shorthand notation for setting log level to 'fatal'
+const FatalLevel = "fatal"
+
 // Logger is the main logging object
 type Logger struct {
 	OrganizationName string `json:"organization_name"`
