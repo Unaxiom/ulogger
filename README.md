@@ -1,6 +1,6 @@
 # ulogger
 
-A custom logger that can be configured with different output colors. It can also stream logs to a remote URL. Take a look at the [documentation](https://godoc.org/github.com/Unaxiom/ulogger).
+A custom logger that can be configured with different output colors. It can also stream logs to a remote URL. Take a look at the [documentation](https://godoc.org/github.com/Unaxiom/ulogger). It can also deep log an element using [spew](https://github.com/davecgh/go-spew).
 
 # Usage
 ```
@@ -42,6 +42,15 @@ log.Errorln(args ...interface{})
 log.Fatal(args ...interface{})
 log.Fatalf(format string, args ...interface{})
 log.Fatalln(args ...interface{})
+```
+
+# Deep logging
+```
+log.DebugDump(args ...interface{})
+log.InfoDump(args ...interface{})
+log.WarningDump(args ...interface{})
+log.ErrorDump(args ...interface{})
+log.FatalDump(args ...interface{})
 ```
 
 # Modification of output colors

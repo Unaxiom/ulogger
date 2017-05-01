@@ -62,6 +62,16 @@ func (log *Logger) Warningln(args ...interface{}) {
 	<-ch
 }
 
+// WarningDump displays the dump of the variables passed using the go-spew library
+func (log *Logger) WarningDump(args ...interface{}) {
+	// Don't stream this to the remote server
+	ch := make(chan int)
+	go func(ch chan int) {
+		writeDump(warningPrefix, log, log.WarningColor, ch, args...)
+	}(ch)
+	<-ch
+}
+
 // Returns a string, along with a logMessage after prefixing the timestamp and the type of log
 func warningPrefix(log *Logger) (*bytes.Buffer, logMessage) {
 	buf := new(bytes.Buffer)

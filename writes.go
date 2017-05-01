@@ -7,6 +7,7 @@ import (
 
 	"os"
 
+	"github.com/davecgh/go-spew/spew"
 	"github.com/fatih/color"
 )
 
@@ -63,6 +64,16 @@ func writef(prefixFunc prefixerSignature, log *Logger, clr *color.Color, ch chan
 		}
 		go sendLogMessageFromWritef(logStruct, ch, format, args...)
 	}()
+}
+
+// writeDump is applicable for all simple logs
+func writeDump(prefixFunc prefixerSignature, log *Logger, clr *color.Color, ch chan int, args ...interface{}) {
+	// Create the log that needs to be displayed on stdout
+	buf, _ := prefixFunc(log)
+	// clr.Fprint(buf, args...)
+	spew.Fdump(buf, args...)
+	clr.Print(buf.String())
+	ch <- 1
 }
 
 // sendLogMessageFromWritef sends log message to server from writef()

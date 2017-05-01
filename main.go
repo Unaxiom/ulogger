@@ -120,6 +120,9 @@ func postLogMessageToServer(log []logMessage) {
 	// Push the message to the remote URL
 	// This function needs should either poll for log messages from the appropriate queues and push to the server
 	// fmt.Printf("Sending Log Message %#v\n\n", log)
+	if RemoteURL == "" {
+		return
+	}
 	var message postMessage
 	message.MessageTag = "Incoming Log"
 	for _, individualLog := range log {

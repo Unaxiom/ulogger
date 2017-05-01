@@ -62,6 +62,16 @@ func (log *Logger) Infoln(args ...interface{}) {
 	<-ch
 }
 
+// InfoDump displays the dump of the variables passed using the go-spew library
+func (log *Logger) InfoDump(args ...interface{}) {
+	// Don't stream this to the remote server
+	ch := make(chan int)
+	go func(ch chan int) {
+		writeDump(infoPrefix, log, log.InfoColor, ch, args...)
+	}(ch)
+	<-ch
+}
+
 // Returns a string, along with a logMessage after prefixing the timestamp and the type of log
 func infoPrefix(log *Logger) (*bytes.Buffer, logMessage) {
 	buf := new(bytes.Buffer)

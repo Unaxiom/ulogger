@@ -64,6 +64,16 @@ func (log *Logger) Errorln(args ...interface{}) {
 	<-ch
 }
 
+// ErrorDump displays the dump of the variables passed using the go-spew library
+func (log *Logger) ErrorDump(args ...interface{}) {
+	// Don't stream this to the remote server
+	ch := make(chan int)
+	go func(ch chan int) {
+		writeDump(errorPrefix, log, log.ErrorColor, ch, args...)
+	}(ch)
+	<-ch
+}
+
 // Returns a string, along with a logMessage after prefixing the timestamp and the type of log
 func errorPrefix(log *Logger) (*bytes.Buffer, logMessage) {
 	buf := new(bytes.Buffer)
