@@ -1,11 +1,16 @@
 package ulogger
 
 import (
+	"runtime"
 	"time"
 
 	"fmt"
 
 	commonStructs "github.com/Unaxiom/ulogger/structs"
+
+	"strings"
+
+	"os"
 
 	"github.com/fatih/color"
 	"github.com/franela/goreq"
@@ -38,6 +43,9 @@ func New() *Logger {
 	// Set the default log level to info
 	log.LogLevel = "info"
 	log.SetLogLevel(log.LogLevel)
+
+	// Set default LineNumber to true
+	log.LineNumber = true
 
 	return log
 }
@@ -148,4 +156,24 @@ func postLogMessageToServer(log []logMessage) {
 			fmt.Println("While sending messages, error is ", err.Error())
 		}
 	}()
+}
+
+// fetchLocation returns the caller's filename, function, and the line number
+func fetchLocation() (string, string, int64) {
+	functionUint, file, line, _ := runtime.Caller(2)
+	function := runtime.FuncForPC(functionUint).Name()
+	file = cleanFilePath(file)
+	return file, function, int64(line)
+}
+
+// cleanFilePath returns the last 2 (or 1) parts of the total file name; for e.g., if the file name is /abc/sdf/fderr/dgdd/nm.go, then it will return dgdd/nm.go
+func cleanFilePath(fileName string) string {
+	fileNameList := strings.Split(fileName, string(os.PathSeparator))
+	// fmt.Println(fileNameList)
+	if len(fileNameList) >= 2 {
+		fileName = strings.Join(fileNameList[len(fileNameList)-2:], string(os.PathSeparator))
+	} else {
+		fileName = strings.Join(fileNameList, string(os.PathSeparator))
+	}
+	return fileName
 }
