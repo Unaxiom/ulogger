@@ -78,11 +78,14 @@ func (log *Logger) WithFields(fields []DisplayField) {
 }
 
 // generateTimestamp returns a logMessage along with the time of creation of this log.
-func generateTimestamp(messageType string) (logMessage, time.Time) {
+func generateTimestamp(messageType string, rtParams runtimeParams) (logMessage, time.Time) {
 	var log logMessage
 	var timestamp = time.Now()
 	log.Timestamp = timestamp.Unix()
 	log.MessageType = messageType
+	log.File = rtParams.file
+	log.Function = rtParams.function
+	log.Line = rtParams.line
 	return log, timestamp
 }
 
@@ -140,6 +143,9 @@ func postLogMessageToServer(log []logMessage) {
 		localLog.MessageType = individualLog.MessageType
 		localLog.OrganizationName = individualLog.OrganizationName
 		localLog.Timestamp = individualLog.Timestamp
+		localLog.File = individualLog.File
+		localLog.Function = individualLog.Function
+		localLog.Line = individualLog.Line
 		message.LogList = append(message.LogList, localLog)
 	}
 
