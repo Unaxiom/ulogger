@@ -148,13 +148,14 @@ func postLogMessageToServer(log []logMessage) {
 		localLog.Line = individualLog.Line
 		message.LogList = append(message.LogList, localLog)
 	}
-
+	goreq.SetConnectTimeout(time.Second * time.Duration(30))
 	logRequest := goreq.Request{
 		Uri:         RemoteURL,
 		Method:      "POST",
 		Accept:      "application/json",
 		ContentType: "application/json",
 		Body:        message,
+		Timeout:     time.Second * time.Duration(30),
 	}
 	go func() {
 		_, err := logRequest.Do()
