@@ -148,7 +148,7 @@ func postLogMessageToServer(log []logMessage) {
 		localLog.Line = individualLog.Line
 		message.LogList = append(message.LogList, localLog)
 	}
-	goreq.SetConnectTimeout(time.Second * time.Duration(30))
+
 	logRequest := goreq.Request{
 		Uri:         RemoteURL,
 		Method:      "POST",
@@ -158,10 +158,12 @@ func postLogMessageToServer(log []logMessage) {
 		Timeout:     time.Second * time.Duration(30),
 	}
 	go func() {
-		_, err := logRequest.Do()
+		resp, err := logRequest.Do()
 		if err != nil {
 			fmt.Println("While sending messages, error is ", err.Error())
+			return
 		}
+		resp.Body.Close()
 	}()
 }
 
